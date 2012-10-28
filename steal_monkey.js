@@ -11,10 +11,6 @@ var fs = require('fs'),
         cleanWhitespace: true
     };
 
-
-console.log(JSON.stringify(argv));
-
-
 function copyFunction(name, ret) {
     return function(){
         context.dependsQueue.push({type: "stealFn", fnStr: name  +"(" + _.map(arguments, function(a) { return JSON.stringify(a).replace(/"([^"'/\-\.:+*&]+)":/g, "$1:")}).join(",") +");"});
@@ -116,7 +112,7 @@ function stealConfig(config) {
             }
         }
 
-        processFile(path.join("..", resource.id), context);
+        processFile(path.join(options.basePath, "..", resource.id), context);
     }
 
     function processFile(file, context, includePreamble) {
