@@ -1,0 +1,8 @@
+{
+    "name":"flatten",
+    "version":"0.0.1",
+    "dependencies":{
+        "underscore": "*",
+        "optimist": "*"
+    }
+}
