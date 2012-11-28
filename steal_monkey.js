@@ -8,7 +8,8 @@ var fs = require('fs'),
         stealCompatible: argv.steal_compatible == "true",
         backup: argv.backup !== "false",
         embedSteal: argv.embed_steal !== "false",
-        cleanWhitespace: true
+        cleanWhitespace: true,
+        stealPath: argv.steal_path || "../steal/steal.production.js"
     };
 
 function copyFunction(name, ret) {
@@ -90,7 +91,7 @@ function stealConfig(config) {
         });
 
         if (options.embedSteal) {
-            var stealContents = fs.readFileSync(path.join(options.basePath, "../steal/steal.production.js")),
+            var stealContents = fs.readFileSync(path.join(options.basePath, options.stealPath)),
                 prodContent = fs.readFileSync(productionFile);
 
             fs.writeFileSync(productionFile, stealContents);
@@ -152,8 +153,8 @@ function stealConfig(config) {
     function writePreamble(buffer) {
         var define = function (moduleId, dependencies, method) { _r[moduleId] = method(); };
         buffer.push("var _r = {};");
-        buffer.push("window.define = " + define.toString() + ";");
-        buffer.push("window.define.amd = { jQuery: true };")
+        buffer.push("this.define = " + define.toString() + ";");
+        buffer.push("this.define.amd = { jQuery: true };")
     }
 
     function writeResources(dependsQueue, dependsTree, buffer, id, resourceId, file) {
